@@ -97,7 +97,7 @@ function check () {
          
   
 </script>
-<style>
+<style scoped>
 .background {  
   background-image: url('/rektori_mod1.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat; height: 100vh;}
 </style>
