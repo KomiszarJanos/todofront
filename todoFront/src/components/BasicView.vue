@@ -1,28 +1,49 @@
+<script setup>
+
+import { useCounterStore } from '@/stores/store';
+import axios from 'axios';
+import { onMounted,ref } from 'vue';
+
+const store=useCounterStore();
+const Projecttodo=ref();
+
+onMounted(async ()=>{
+  try{
+  const response= await axios.get('http://localhost:3000/api/todo');
+  Projecttodo.value=response.data;}
+catch (error) {console.error}}
+)
+console.log(store.Todos);
+
+</script>
+
 <template>
-  <div class="container">
+  <div class="container" v-if="!store.NotLogged">
   <h1 > Folyamatban lévő projektek </h1>
     
   <table>
     <thead>
       <tr>
-        <th>Határidős feladat</th>
         <th>Projekt név</th>
         <th>Kezdési dátum</th>
         <th>Elvégzett feladatok</th>
-        <th>Feladat szerkesztése</th>
+        <th>Project szerkesztése</th>
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td>2025.03.02</td>
-        <td>Lélegeztető beszerzés</td>
+      <tr v-for="p in store.Todos.todo" :key="p._id">
+        <td>{{p.Name}}</td>
+        <td>{{p.Date}}</td>
         <td>2024.12.23</td>
-        <td>...</td>
+        <td><button>Szerkeszt</button></td>
         
       </tr>
     </tbody>
 
   </table>
+</div>
+<div v-else>
+<h1>Belépés szükséges!</h1>
 </div>
 </template>
 

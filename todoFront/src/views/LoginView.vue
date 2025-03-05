@@ -7,7 +7,7 @@
   
     </v-progress-circular>
     </v-overlay>
-  <div v-if="Notlogged" class="background pt-14">
+  <div v-if="store.NotLogged" class="background pt-14">
     <v-card class="mx-auto px-6 py-8" max-width="344">
       <v-form v-model="form" @submit.prevent="onSubmit()" >
         <v-text-field
@@ -47,50 +47,63 @@
     </v-card>
   </div>
   <div v-else>
-    <TheNavBar></TheNavBar>
+    
     <Basic></Basic>
-    <TheFooter></TheFooter>
+    
     <p>{{ LoginName }}</p>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router';
 import { useCounterStore } from '@/stores/store';
 import Basic from '../components/BasicView.vue'
-import TheFooter from '../components/TheFooter.vue'
-import TheNavBar from '../components/TheNAVBar.vue'
 import Swal from 'sweetalert2'
-
+import axios from 'axios';
 
 const router=useRouter();
 const form= ref(false);
 const LoginName=ref();
+
 const Password=ref();
 const visible=ref(false);
 const store=useCounterStore()
-const Notlogged=ref(true);
+
 const submittrue=ref(false);
 
 function onSubmit () {
-    
-    setTimeout(() => (check()), 2000) };
+    submittrue.value=true;
+    setTimeout(() => { submittrue.value=false;}, 2000);
+    check();
+  };
 
 function check () {
-  if(LoginName.value=='Jani' && Password.value=='Jani') {
-    submittrue.value=true;
-    setTimeout(() => { submittrue.value=false; Notlogged.value=false;  }, 2000) }
+  axios.post('http://localhost:3000/api/user/',{"Name":LoginName.value,"Password": Password.value})
+  .then(response=>
+    {const succescode=response.data.successcode;
 
-  else {
-    submittrue.value=true;
-    setTimeout(() => { submittrue.value=false; }, 2000);
-    Swal.fire({ position: 'top-center',
+      //console.log(succescode);
+      if (succescode===3) {store.NotLogged=false; store.UserName=response.data.name; console.log("siker");}
+      else {Swal.fire({ position: 'top-center',
                 icon: 'error',
                 title: 'Nem megfelelő név vagy jelszó páros kérem vegye fel a kapcsolatot az adminnal',
                 showConfirmButton: false,
                 timer: 1500  }); }
-  }
+              })
+ }
+    
+ onMounted(async ()=>{
+  try{
+  const response= await axios.get('http://localhost:3000/api/todo');
+  store.Todos=response.data;}
+catch (error) {console.error}})
+onMounted(async ()=>{
+  try{
+  const response= await axios.get('http://localhost:3000/api/task');
+  store.Task=response.data;}
+catch (error) {console.error}})
+
 
   
                   
