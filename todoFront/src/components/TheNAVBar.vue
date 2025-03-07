@@ -24,25 +24,25 @@ function changeView() {
       <v-btn icon @click="changeView()" v-if="store.DayliList">
         <Router-link :to="{name:'login'}">
         <span> 
-            <v-icon>mdi-format-list-numbered</v-icon>
+            <v-icon title="Projekt nézet">mdi-format-list-numbered</v-icon>
         </span></Router-link>
       </v-btn>
       <v-btn icon @click="changeView()" v-else>
         <Router-link :to="{name:'daily'}">
         <span> 
-            <v-icon>mdi-list-box</v-icon>
+            <v-icon title="Feladat nézet">mdi-list-box</v-icon>
         </span></Router-link>
       </v-btn>
 
 
       <v-btn icon v-if="!store.DayliList">
         <span>
-            <v-icon>mdi-folder-plus</v-icon>
+            <v-icon title="Új project">mdi-folder-plus</v-icon>
         </span>
       </v-btn>
       <v-btn icon>
         <span>
-        <v-icon>mdi-export</v-icon>
+        <v-icon title="Kilépés">mdi-export</v-icon>
         </span>
       </v-btn>
       

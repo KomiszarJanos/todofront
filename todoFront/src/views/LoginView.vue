@@ -50,7 +50,7 @@
     
     <Basic></Basic>
     
-    <p>{{ LoginName }}</p>
+    
   </div>
 </template>
 
@@ -83,7 +83,6 @@ function check () {
   .then(response=>
     {const succescode=response.data.successcode;
 
-      //console.log(succescode);
       if (succescode===3) {store.NotLogged=false; store.UserName=response.data.name; console.log("siker");}
       else {Swal.fire({ position: 'top-center',
                 icon: 'error',
