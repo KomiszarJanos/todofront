@@ -94,8 +94,10 @@ function check () {
     
  onMounted(async ()=>{
   try{
-  const response= await axios.get('http://localhost:3000/api/todo');
-  store.Todos=response.data;}
+  const response= await axios.get('http://localhost:3000/api/todo/notreadywithtasksbyname');
+  store.Todos=response.data;
+  console.log(store.Todos);
+  }
 catch (error) {console.error}})
 onMounted(async ()=>{
   try{
