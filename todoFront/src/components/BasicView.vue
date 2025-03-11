@@ -115,25 +115,28 @@ watch(()=>store.ShowisReadyTodo, (newValue)=>{
     <h3>Új feladat rögzítése:</h3>
     <div class="Data">
     <label >Feladat leírása:</label>
-    <input type="text">
+    <input type="text" v-model="store.NewTask.Desc">
     </div>
     <div class="Data">
     <label>Feladat határideje:</label>
-    <input type="Data">
+    <input type="date" v-model="store.NewTask.DeadlineDate">
     </div>
     <div class="Data">
     <label>Feladat felelőse:</label>
-    <input type="text">
+    <select v-model="store.NewTask.User" >
+      <option v-for="u in store.Users.UserNames" :value=u :key="u">{{ u }}</option>
+ 
+    </select>
     </div>
     <div class="rogzitbutton">
-    <button class="btnrogzit">Rögzít</button>
+    <button class="btnrogzit" @click=store.SendNewTask>Rögzít</button>
     </div>
   </div>
   
   <div class="FormData2">
     <h3>Feladat kivezetése</h3>
     <div class="rogzitbutton">
-      <button class="btnarchiv">ARCHIVAL</button>
+      <button class="btnarchiv" @click="store.ArchivateProject">ARCHIVAL</button>
       </div>
     </div>
   
@@ -192,7 +195,7 @@ li {list-style: none;}
 .input {margin-right: 12px;}
 .searchcontainer {display: flex; justify-content: space-around; align-items: center; margin-bottom: 34px; margin-top:34px; height: 20px;}
 .FormContainer {position:fixed; left:50%; top:50%; 
-                transform:translate(-50%, -50%); z-index: 3000;
+                transform:translate(-50%, -50%); z-index: 3;
                 min-width:60%; min-height: 40%;
                 background-color: rgb(235, 211, 211);
                 border:black 2px solid;
@@ -203,7 +206,7 @@ li {list-style: none;}
                 padding: 24px;
               }
 .backdrop {position:fixed; top:0; left:0; width: 100vw; min-height: 100%; background: rgba(0,0,0, 0.3);
-z-index: 2000;}
+z-index: 2;}
 .FormData1 { background-color:rgb(176, 232, 240); display: flex; flex-direction: column;
     justify-content:left; align-items:flex-start; width: 80%; text-align: left;
     padding:4px; margin-bottom:0; margin-right: 4px; margin-left: 0; border-radius: 4px;}
@@ -214,7 +217,7 @@ z-index: 2000;}
 .FormData4 {
    width:50%; display: flex; flex-direction: column;  justify-content:left; align-items:flex-start; margin-left: 12px; }  
 .Data { width:100%; display: flex; justify-content: space-between; align-items: flex-start; padding:4px; margin:2px;}
-input {width:60%; background-color: rgb(65, 75, 219); border-radius: 4px; color: white;}
+input, select{width:60%; background-color: rgb(65, 75, 219); border-radius: 4px; color: white;}
 label {width:40%;}
 h3 {margin-bottom: 12px; text-align: center; margin-top: 12px;}
 .rogzitbutton { width: 100%;

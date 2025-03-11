@@ -1,6 +1,7 @@
-import { ref, computed } from 'vue'
+import { ref, computed, reactive } from 'vue'
 import { defineStore } from 'pinia'
 import axios from 'axios';
+import Swal from 'sweetalert2'
 
 export const useCounterStore = defineStore('store', () => {
   const UserName = ref();
@@ -31,22 +32,77 @@ export const useCounterStore = defineStore('store', () => {
       const response= await axios.get('http://localhost:3000/api/todo/allwithtasksbyname');
     Todos.value=response.data;}
     }
-  
+    const Users=ref();
+    const FoundedTodo=ref();
+    
     async function EnterProjectsForm(id) {
     ShowProjects.value=false;
     const response= await axios.get(`http://localhost:3000/api/todo/${id}`);
+    const userresponse=await axios.get((`http://localhost:3000/api/user/name`));
+    Users.value=userresponse.data;
     FoundedTodo.value=response.data;
+    console.log(FoundedTodo.value);
     if(FoundedTodo.value.Found.Ready)  {NotArchivedProject.value=false;}
     else {NotArchivedProject.value=true;}
-    console.log(NotArchivedProject.value);
   
   }
    
   function ExitProjectsForm() {ShowProjects.value=true;}
+  
   const NotArchivedProject=ref();
-  const FoundedTodo=ref();
+  const NewTask=reactive({
+    "DeadlineDate":"",
+    "Desc":"",
+    "User":"",
+    "ProjectId":"",
+    "Ready":false
+        })
+
+  function SendNewTask() {
+    NewTask.ProjectId=FoundedTodo.value.Found._id;
+    if(NewTask.DeadlineDate=="" || NewTask.Desc=="" || NewTask.User=="")
+      { console.log("hiba");
+        Swal.fire({ position: 'top-center',
+        icon: 'error',
+        title: 'Kérem a táblázat minden adatát feltölteni!!!',
+        showConfirmButton: false,
+        timer: 1500  });}
+    else {
+    axios.post('http://localhost:3000/api/task',{  
+      "DeadlineDate": NewTask.DeadlineDate,
+      "Desc":NewTask.Desc,
+      "User":NewTask.User,
+      "ProjectId":NewTask.ProjectId,
+      "Ready":NewTask.Ready});
+      Swal.fire({ position: 'top-center',
+        icon: 'success',
+        title: 'Új feladat rögzítésre került',
+        showConfirmButton: false,
+        timer: 1500  });
+     orderbyName();
+     ExitProjectsForm();
+      }
+  }
+
+  function ArchivateProject() {
+    let ProjectId=FoundedTodo.value.Found._id;
+    Swal.fire({ position: 'top-center',
+      icon: 'warning',
+      title: 'Biztos, hogy módosítod a Project státuszát?',
+      showConfirmButton: true,
+      confirmButtonText:"Végrehajt",
+      showCancelButton:true,
+      cancelButtonText:"Mégse", }).then((result)=>{if(result.isConfirmed)
+      {axios.put(`http://localhost:3000/api/todo/${ProjectId}`);
+      orderbyName();
+      ExitProjectsForm();   
+    } 
+      else {Swal.close()}
+    })
+  }
 
   return { UserName, NotLogged, DayliList, Todos, Task, Orderedtodobyname, orderbyDate, orderbyName,
-    ShowisReadyTodo,EnterProjectsForm, ShowProjects, ExitProjectsForm, NotArchivedProject, FoundedTodo }
+    ShowisReadyTodo,EnterProjectsForm, ShowProjects, ExitProjectsForm, NotArchivedProject, FoundedTodo,
+  NewTask, Users, SendNewTask, ArchivateProject }
 
 })

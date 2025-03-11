@@ -83,7 +83,7 @@ function check () {
   .then(response=>
     {const succescode=response.data.successcode;
 
-      if (succescode===3) {store.NotLogged=false; store.UserName=response.data.name; console.log("siker");}
+      if (succescode===3) {store.NotLogged=false; store.UserName=response.data.name;}
       else {Swal.fire({ position: 'top-center',
                 icon: 'error',
                 title: 'Nem megfelelő név vagy jelszó páros kérem vegye fel a kapcsolatot az adminnal',
@@ -96,7 +96,6 @@ function check () {
   try{
   const response= await axios.get('http://localhost:3000/api/todo/notreadywithtasksbyname');
   store.Todos=response.data;
-  console.log(store.Todos);
   }
 catch (error) {console.error}})
 onMounted(async ()=>{
