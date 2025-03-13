@@ -35,9 +35,9 @@ function changeView() {
       </v-btn>
 
 
-      <v-btn icon v-if="!store.DayliList">
+      <v-btn icon v-if="!store.DayliList" @click="store.DoShowNewProjectForm()">
         <span>
-            <v-icon title="Új project">mdi-folder-plus</v-icon>
+            <v-icon title="Új project" >mdi-folder-plus</v-icon>
         </span>
       </v-btn>
       <v-btn icon>

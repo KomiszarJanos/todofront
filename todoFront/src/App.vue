@@ -9,7 +9,9 @@ const store=useCounterStore();
 
 <template>
 <TheNavBar v-if="!store.NotLogged"></TheNavBar>
+<v-fade-transition>
 <RouterView />
+</v-fade-transition>
 <TheFooter v-if="!store.NotLogged"></TheFooter>
 </template>
 
